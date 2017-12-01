@@ -19,12 +19,16 @@ DOCKER_ARGS="-f docker-compose-dev.yml"
 echo 'Bringing up the Database'
 docker-compose ${DOCKER_ARGS} up -d db
 
-sleep 2
+sleep 5
 
 echo 'Bringing up the Wordpress instance'
 docker-compose ${DOCKER_ARGS} up -d wordpress
 
-sleep 1
+sleep 3
+
+echo 'Adding required extensions'
+docker-compose ${DOCKER_ARGS} exec wordpress apk add --update --no-cache zlib-dev
+docker-compose ${DOCKER_ARGS} exec wordpress docker-php-ext-install zip pdo pdo_mysql
 
 # wp core multisite-install
 #   [--url=<url>]
