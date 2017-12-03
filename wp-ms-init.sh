@@ -14,7 +14,8 @@ if [ "x${ok}" = "x0" ]; then
     exit
 fi
 
-DOCKER_ARGS="-f docker-compose-dev.yml"
+# Get default from environment, so you can pass things like "-f docker-compose-dev.yml"
+DOCKER_ARGS="${DOCKER_ARGS}"
 
 echo 'Bringing up the Database'
 docker-compose ${DOCKER_ARGS} up -d db
