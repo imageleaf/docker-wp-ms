@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   cli:
-    image: wordpress:cli-php7.1
+    image: wordpress:cli-php${PHP_VER:-7.1}
     volumes:
       - wordpress:/var/www/html
     depends_on:
@@ -17,13 +17,13 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "8080:80"
+      - "${WEB_PORT}:80"
     depends_on:
       - wordpress
     networks:
       - web
   wordpress:
-    image: wordpress:php7.1-fpm-alpine
+    image: wordpress:php${PHP_VER:-7.1}-fpm-alpine
     volumes:
       - wordpress:/var/www/html
     env_file:
@@ -34,7 +34,7 @@ services:
       - database
       - web
   db:
-    image: mariadb:10.2
+    image: mariadb:${MARIADB_VER:-10.2}
     volumes:
       - db-data:/var/lib/mysql
     env_file:
