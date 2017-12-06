@@ -27,10 +27,6 @@ docker-compose ${DOCKER_ARGS} up -d wordpress
 
 sleep 3
 
-echo 'Adding required extensions'
-docker-compose ${DOCKER_ARGS} exec wordpress apk add --update --no-cache zlib-dev
-docker-compose ${DOCKER_ARGS} exec wordpress docker-php-ext-install zip pdo pdo_mysql
-
 # wp core multisite-install
 #   [--url=<url>]
 #   [--base=<url-path>]
@@ -55,3 +51,6 @@ docker-compose ${DOCKER_ARGS} run --rm cli wp core multisite-install \
 
 echo 'Bringing up the Nginx HTTP server'
 docker-compose ${DOCKER_ARGS} up -d web
+
+echo 'In order to save space, Run this after pulling new version of docker images:'
+echo "  docker images -a | awk '{print \$3}' | xargs -n 1 docker rmi"
