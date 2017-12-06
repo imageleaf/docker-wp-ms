@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   cli:
-    image: wordpress:cli-php${PHP_VER:-7.1}
+    image: yehuda/wordpress:cli-php${PHP_VER:-7.1}
     volumes:
       - wordpress:/var/www/html
     depends_on:
@@ -23,7 +23,7 @@ services:
     networks:
       - web
   wordpress:
-    image: wordpress:php${PHP_VER:-7.1}-fpm-alpine
+    image: yehuda/wordpress:php${PHP_VER:-7.1}-fpm-alpine
     volumes:
       - wordpress:/var/www/html
     env_file:
