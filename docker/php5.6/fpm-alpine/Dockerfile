@@ -1,3 +1,5 @@
+FROM wordpress:php5.6-fpm-alpine
+
 MAINTAINER Yehuda Deutsch <yeh@uda.co.il>
 
 RUN apk add --update --no-cache zlib-dev \

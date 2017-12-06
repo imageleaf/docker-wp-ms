@@ -1,3 +1,5 @@
+FROM wordpress:php7.1-apache
+
 MAINTAINER Yehuda Deutsch <yeh@uda.co.il>
 
 RUN apk add --update --no-cache zlib-dev \
