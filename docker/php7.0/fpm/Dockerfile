@@ -2,5 +2,6 @@ FROM wordpress:php7.0-fpm
 
 MAINTAINER Yehuda Deutsch <yeh@uda.co.il>
 
-RUN apk add --update --no-cache zlib-dev \
+RUN apt-get update -q \
+    && apt-get install -y -q zlib1g-dev \
     docker-php-ext-install zip pdo pdo_mysql
