@@ -1,6 +1,10 @@
-FROM wordpress:php5.6-fpm-alpine
+FROM wordpress:cli-php7.0
 
 MAINTAINER Yehuda Deutsch <yeh@uda.co.il>
 
+USER root
+
 RUN apk add --update --no-cache zlib-dev \
     && docker-php-ext-install zip pdo pdo_mysql
+
+USER www-data

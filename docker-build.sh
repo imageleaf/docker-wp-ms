@@ -1,25 +1,34 @@
 #!/bin/bash
 
 VERSION_LIST=('5.6' '7.0' '7.1')
+declare -A VARIANT_LIST
+VARIANT_LIST=(
+    ['apache']='debian'
+    ['cli']='alpine-cli'
+    ['fpm']='debian'
+    ['fpm-alpine']='alpine'
+)
 
-# Alpine based
-for version in '5.6' '7.0' '7.1'; do
-    dirname="docker/php${version}/fpm-alpine"
-    mkdir -p "${dirname}"
-    base="php${version}-fpm-alpine"
-    dockerfile="${dirname}/Dockerfile"
-    echo -e "FROM wordpress:${base}\n" > "${dockerfile}"
-    echo "$(cat Dockerfile-alpine)" >> "${dockerfile}"
-done
-
-# Debian based
-for version in '5.6' '7.0' '7.1'; do
-    for variant in 'apache' 'fpm'; do
+for version in "${VERSION_LIST[@]}"; do
+    for variant in "${!VARIANT_LIST[@]}"; do
         dirname="docker/php${version}/${variant}"
         mkdir -p "${dirname}"
         base="php${version}-${variant}"
+        if [ "${variant}" == "cli" ]; then
+            base="${variant}-php${version}"
+        fi
+        echo "Creating Dockerfile for ${base}"
         dockerfile="${dirname}/Dockerfile"
         echo -e "FROM wordpress:${base}\n" > "${dockerfile}"
-        echo "$(cat Dockerfile-debian)" >> "${dockerfile}"
+        base_dockerfile="Dockerfile-${VARIANT_LIST[$variant]}"
+        echo "$(cat $base_dockerfile)" >> "${dockerfile}"
+        docker build -t "wordpress:${base}" "${dirname}" 2>&1 > "docker_build_${base}.log"
+        result=$?
+        if [ "x${result}" != "x0" ]; then
+            echo "Failed building image for ${base}"
+        else
+            echo "Building image for ${base} succeeded"
+        fi
+        docker rmi "wordpress:${base}"
     done
 done
