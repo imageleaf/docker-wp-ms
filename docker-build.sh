@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION_LIST=('5.6' '7.0' '7.1')
+VERSION_LIST=('5.6' '7.0' '7.1', '7.2')
 declare -A VARIANT_LIST
 VARIANT_LIST=(
     ['apache']='debian'
@@ -22,6 +22,7 @@ for version in "${VERSION_LIST[@]}"; do
         echo -e "FROM wordpress:${base}\n" > "${dockerfile}"
         base_dockerfile="Dockerfile-${VARIANT_LIST[$variant]}"
         echo "$(cat $base_dockerfile)" >> "${dockerfile}"
+        docker pull "wordpress:${base}"
         docker build -t "wordpress:${base}" "${dirname}" 2>&1 > "docker_build_${base}.log"
         result=$?
         if [ "x${result}" != "x0" ]; then
