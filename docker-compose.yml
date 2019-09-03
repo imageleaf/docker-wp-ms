@@ -1,31 +1,20 @@
-version: '3.3'
+version: '3'
 
 services:
-  cli:
-    image: yehuda/wordpress:cli-php${PHP_VER:-7.1}
-    volumes:
-      - wordpress:/var/www/html
-    depends_on:
-      - wordpress
-      - db
-    networks:
-      - database
-    restart: always
   web:
-    image: nginx:alpine
+    image: yehuda/wp-nginx:latest
     volumes:
       - wordpress:/var/www/html
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "${WEB_PORT}:80"
+      - "127.0.0.1:${WEB_PORT}:80"
+      - "127.0.0.1:${WEB_STATIC_PORT}:8080"
     depends_on:
       - wordpress
     networks:
       - web
-    restart: always
+    restart: unless-stopped
   wordpress:
-    image: yehuda/wordpress:php${PHP_VER:-7.1}-fpm-alpine
+    image: yehuda/wordpress:php${PHP_VER:-7.3}-fpm-alpine
     volumes:
       - wordpress:/var/www/html
     env_file:
@@ -35,7 +24,7 @@ services:
     networks:
       - database
       - web
-    restart: always
+    restart: unless-stopped
   db:
     image: mariadb:${MARIADB_VER:-10.2}
     volumes:
@@ -44,7 +33,7 @@ services:
       - mariadb.env
     networks:
       - database
-    restart: always
+    restart: unless-stopped
 
 volumes:
   wordpress:

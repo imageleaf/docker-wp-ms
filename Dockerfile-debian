@@ -1,11 +1,14 @@
 MAINTAINER Yehuda Deutsch <yeh@uda.co.il>
 
 RUN apt-get update -q \
-    && apt-get install -y -q zlib1g-dev \
+    && apt-get install -y -q zlib1g-dev libzip-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install zip pdo pdo_mysql
 
 # Set some php preferences
-RUN { \
-        echo 'upload_max_filesize = 64M'; \
-    } > /usr/local/etc/php/conf.d/wordpress-prefs.ini
+RUN sed -e 's/post_max_size =.*/post_max_size = 64M/' \
+          -e 's/upload_max_filesize =.*/upload_max_filesize = 64M/' \
+          -e 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=0/' \
+          -e 's/;always_populate_raw_post_data =.*/always_populate_raw_post_data = -1/' \
+          -e 's/;mysqli.allow_local_infile =.*/mysqli.allow_local_infile = 0/' \
+          /usr/local/etc/php/php.ini-production > /usr/local/etc/php/php.ini
