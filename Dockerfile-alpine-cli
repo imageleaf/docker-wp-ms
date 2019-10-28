@@ -5,8 +5,7 @@ USER root
 RUN apk add --update --no-cache zlib-dev libzip-dev \
     && docker-php-ext-install zip pdo pdo_mysql
 
-RUN sed -e 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=0/' \
-          -e 's/;mysqli.allow_local_infile =.*/mysqli.allow_local_infile = 0/' \
+RUN sed -e 's/;mysqli.allow_local_infile =.*/mysqli.allow_local_infile = 0/' \
           /usr/local/etc/php/php.ini-production > /usr/local/etc/php/php.ini
 
 USER www-data
