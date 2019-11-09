@@ -1,0 +1,15 @@
+MAINTAINER Yehuda Deutsch <yeh@uda.co.il>
+
+USER root
+
+RUN apk add --update --no-cache zlib-dev libzip-dev \
+    && docker-php-ext-install zip pdo pdo_mysql
+
+RUN sed -e 's/;mysqli.allow_local_infile =.*/mysqli.allow_local_infile = 0/' \
+          /usr/local/etc/php/php.ini-production > /usr/local/etc/php/php.ini
+
+COPY crontabs/www-data /etc/crontabs/
+
+USER www-data
+
+CMD ['crond', '-f', '-l', '8']
