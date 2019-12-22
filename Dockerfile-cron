@@ -12,4 +12,4 @@ COPY crontabs/www-data /etc/crontabs/
 
 USER www-data
 
-CMD ["crond", "-f", "-l", "8"]
+CMD ["crond", "-f", "-l", "6", "-L", "/dev/stdout"]
