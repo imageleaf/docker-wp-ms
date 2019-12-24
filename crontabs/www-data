@@ -1,1 +1,1 @@
-*/10 * * * *  wp cron event run --due-now
+*/10 * * * *  cd /var/www/html && wp cron event run --due-now
