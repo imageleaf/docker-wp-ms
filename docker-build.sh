@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION_LIST=('5.6' '7.2' '7.3')
+VERSION_LIST=('7.3' '7.4')
 declare -A TARGET_TAG_VARIANT_MAP
 TARGET_TAG_VARIANT_MAP=(
     ['cron']='cli'
