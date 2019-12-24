@@ -10,6 +10,4 @@ RUN sed -e 's/;mysqli.allow_local_infile =.*/mysqli.allow_local_infile = 0/' \
 
 COPY crontabs/www-data /etc/crontabs/
 
-USER www-data
-
 CMD ["crond", "-f", "-l", "6", "-L", "/dev/stdout"]
