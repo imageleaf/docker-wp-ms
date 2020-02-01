@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 VERSION_LIST=('7.3' '7.4')
 declare -A TARGET_TAG_VARIANT_MAP

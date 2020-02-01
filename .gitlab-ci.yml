@@ -18,6 +18,7 @@ docker-build-master:
     - docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASS}"
     - docker login -u "${CI_REGISTRY_USER}" -p "${CI_REGISTRY_PASSWORD}" ${CI_REGISTRY}
   script:
+    - ls
     - ./docker-build.sh
   only:
     - master
