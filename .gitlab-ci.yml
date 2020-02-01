@@ -1,0 +1,42 @@
+services:
+  - docker:dind
+
+variables:
+  BASE_REGISTRY_REPO: wordpress
+  TARGET_REGISTRY_REPO: yehuda/wordpress
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_TLS_CERTDIR: ""
+
+
+docker-build-master:
+  # Official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASS}"
+    - docker login -u "${CI_REGISTRY_USER}" -p "${CI_REGISTRY_PASSWORD}" ${CI_REGISTRY}
+  script:
+    - ./docker-build.sh
+  only:
+    - master
+
+docker-build:
+  # Official docker image.
+  image: docker:latest
+  stage: build
+  variables:
+    IMAGE_TAG: ${CI_COMMIT_TAG}
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASS}"
+    - docker login -u "${CI_REGISTRY_USER}" -p "${CI_REGISTRY_PASSWORD}" ${CI_REGISTRY}
+  script:
+    - ./docker-build.sh
+  only:
+    - tags
+    - /^v\d+\.\d+\.\d+/
+  except:
+    - master
