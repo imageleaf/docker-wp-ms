@@ -35,7 +35,9 @@ for target_variant in "${!TARGET_TAG_VARIANT_MAP[@]}"; do
   dockerfile_content=$(sed -e "s/PHP_VERSION/${version}/" "${base_dockerfile}")
   docker pull "${BASE_REGISTRY_REPO}:${base_tag}"
   new_image_tag="${TARGET_REGISTRY_REPO}:${target_tag}"
+  set -x
   echo -e "FROM ${BASE_REGISTRY_REPO}:${base_tag}\n${dockerfile_content}" | docker build -t "${new_image_tag}" -f - . 2>&1 > "docker_build_${base_tag}.log"
+  set +x
   result=$?
   if [[ "x${result}" != "x0" ]]; then
     echo 1>&2 "Failed building image for ${target_tag}"
